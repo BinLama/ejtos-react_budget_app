@@ -106,6 +106,10 @@ export const AppProvider = (props) => {
         remaining = state.budget - totalExpenses;
     }
 
+    const totalExpenses = state.expenses.reduce((total, item) => {
+        return (total += item.cost);
+    }, 0);
+
     return (
         <AppContext.Provider
             value={{
@@ -113,6 +117,7 @@ export const AppProvider = (props) => {
                 budget: state.budget,
                 remaining: remaining,
                 dispatch,
+                totalExpenses,
                 currency: state.currency
             }}
         >

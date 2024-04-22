@@ -9,28 +9,43 @@ const AllocationForm = (props) => {
     const [action, setAction] = useState('');
 
     const submitEvent = () => {
+        const isNumerical = (num) => {
+            const numbers = new Set(["0","1","2","3","4","5","6","7","8","9"])
+            if (num.length < 1) return false;
+            for (let n of num) {
+                console.log(n);
+                if (!numbers.has(n)) {
+                    return false
+                }
+            }
+            return true;
+        }
 
-            if(cost > remaining) {
+        if (isNumerical(cost)) {
+            if(cost > remaining && ( action === "Add" || action === "")) {
                 alert("The value cannot exceed remaining funds  £"+remaining);
                 setCost("");
                 return;
             }
 
-        const expense = {
-            name: name,
-            cost: parseInt(cost),
-        };
-        if(action === "Reduce") {
-            dispatch({
-                type: 'RED_EXPENSE',
-                payload: expense,
-            });
-        } else {
+            const expense = {
+                name: name,
+                cost: parseInt(cost),
+            };
+            if(action === "Reduce") {
+                dispatch({
+                    type: 'RED_EXPENSE',
+                    payload: expense,
+                });
+            } else {
                 dispatch({
                     type: 'ADD_EXPENSE',
                     payload: expense,
                 });
             }
+        } else {
+            alert(`Please provide a valid number.`)
+        }
     };
 
     return (
@@ -58,15 +73,14 @@ const AllocationForm = (props) => {
                         <option defaultValue value="Add" name="Add">Add</option>
                 <option value="Reduce" name="Reduce">Reduce</option>
                   </select>
-
+                    <span style={{ marginLeft: '2rem', marginRight: "0.625rem" , size: 10, marginBlock: "auto"}}>£</span>
                     <input
                         required='required'
                         type='number'
                         id='cost'
                         value={cost}
-                        style={{ marginLeft: '2rem' , size: 10}}
                         onChange={(event) => setCost(event.target.value)}>
-                        </input>
+                    </input>
 
                     <button className="btn btn-primary" onClick={submitEvent} style={{ marginLeft: '2rem' }}>
                         Save
